@@ -1,0 +1,12 @@
+#!/bin/bash
+
+profile_tool='/usr/bin/profiles'
+profile_name='DontSaveNewDocumentsToiCloud.mobileconfig'
+profile_identifier='org.macenterprise.DontSaveNewDocumentsToiCloud'
+profile_check=$(profiles -P | grep $profile_identifier)
+
+if [ "${profile_check}" != "" ]  ; then
+    echo "Already Present, skipping install..."
+else
+    $profile_tool -v -I -F "${1}/Contents/Resources/${profile_name}"
+fi
