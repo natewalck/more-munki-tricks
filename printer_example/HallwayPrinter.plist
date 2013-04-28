@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>production</string>
+	</array>
+	<key>description</key>
+	<string>Hallway printer next to the water cooler.</string>
+	<key>display_name</key>
+	<string>Hallway Printer</string>
+	<key>minimum_os_version</key>
+	<string>10.7.0</string>
+	<key>name</key>
+	<string>HallwayPrinter</string>
+	<key>installer_item_hash</key>
+	<string>cc77681ca1ba1c71e00badd142c5380df7ed9cc3c6badb2fe17320bcafa0cb0a</string>	
+	<key>preinstall_script</key>
+	<string>#!/bin/sh
+# (c) 2010 Walter Meyer SUNY Purchase College
+
+# Script to install and setup printers on a Mac OS X system in a "Munki-Friendly" way.
+# Make sure to install the required drivers first!
+
+# Variables. Edit these.
+printername="HallwayPrinter"
+location="The hallway"
+gui_display_name="HallwayPrinter"
+address="lpd://printserver01.domain.company.com/HallwayPrinter"
+driver_ppd="/Library/Printers/PPDs/Contents/Resources/Kyocera FS-9530DN.PPD"
+# Populate these options if you want to set specific options for the printer. E.g. duplexing installed, etc.
+option_1="Option18=HardDisk"
+option_2="Option19=Two"
+option_3=""
+
+### Printer Install ###
+# In case we are making changes to a printer we need to remove an existing queue if it exists.
+/usr/bin/lpstat -p | grep -w "$printername"
+if [ $? -eq 0 ]; then
+        /usr/sbin/lpadmin -x "$printername"
+fi
+
+# Now we can install the printer.
+/usr/sbin/lpadmin \
+        -p "$printername" \
+        -L "$location" \
+        -D "$gui_display_name" \
+        -v "$address" \
+        -P "$driver_ppd" \
+        -o "$option_1" \
+        -o "$option_2" \
+        -o "$option_3" \
+        -o printer-is-shared=false \
+        -E
+# Enable and start the printers on the system (after adding the printer initially it is paused).
+/usr/sbin/cupsenable $(lpstat -p | grep -w "printer" | awk '{print$2}')
+
+# Create an uninstall script for the printer.
+uninstall_script="/private/etc/cups/printers_deployment/uninstalls/$printername.sh"
+mkdir -p /private/etc/cups/printers_deployment/uninstalls
+echo "#!/bin/sh" &gt; "$uninstall_script"
+echo '/usr/sbin/lpadmin -x "'$printername'"' &gt;&gt; "$uninstall_script"
+echo '/usr/bin/srm "/private/etc/cups/printers_deployment/uninstalls/'$printername.sh'"' &gt;&gt; "$uninstall_script"
+
+# Permission the directories properly.
+chown -R root:_lp /private/etc/cups/printers_deployment
+chmod -R 700 /private/etc/cups/printers_deployment
+
+exit 0
+	</string>
+	<key>installcheck_script</key>
+	<string>#!/bin/bash
+/usr/bin/lpstat -p | grep -v "$printername"</string>
+	</dict>
+	<key>unattended_install</key>
+	<true/>	
+	<key>unattended_uninstall</key>
+	<true/>	
+	<key>requires</key>
+	<array>
+		<string>KyoceraMita</string>
+	</array>
+	<key>version</key>
+	<string>1.0.0</string>	
+	<key>uninstall_method</key>
+	<string>uninstall_script</string>
+	<key>uninstall_script</key>
+	<string>#!/bin/sh
+"/etc/cups/printers_deployment/uninstalls/HallwayPrinter.sh"
+	</string>
+	<key>uninstallable</key>
+	<true/>
+</dict>
+</plist>
+
