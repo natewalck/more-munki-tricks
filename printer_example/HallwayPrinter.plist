@@ -81,7 +81,7 @@ exit 0
 	<true/>
 	<key>requires</key>
 	<array>
-		<string>KyoceraMita</string>
+		<string>KyoceraMitaDrivers</string>
 	</array>
 	<key>version</key>
 	<string>1.0.0</string>
