@@ -14,11 +14,11 @@
 	<string>Hallway Printer</string>
 	<key>minimum_os_version</key>
 	<string>10.7.0</string>
+    <key>installer_type</key>
+    <string>nopkg</string>
 	<key>name</key>
 	<string>HallwayPrinter</string>
-	<key>installer_item_hash</key>
-	<string>cc77681ca1ba1c71e00badd142c5380df7ed9cc3c6badb2fe17320bcafa0cb0a</string>
-	<key>preinstall_script</key>
+	<key>postinstall_script</key>
 	<string>#!/bin/sh
 # (c) 2010 Walter Meyer SUNY Purchase College
 
