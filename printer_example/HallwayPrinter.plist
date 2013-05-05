@@ -6,7 +6,8 @@
 	<false/>
 	<key>catalogs</key>
 	<array>
-		<string>production</string>
+		<string>development</string>
+        <string>production</string>
 	</array>
 	<key>description</key>
 	<string>Hallway printer next to the water cooler.</string>
