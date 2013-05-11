@@ -19,15 +19,15 @@
 	<string>nopkg</string>
 	<key>name</key>
 	<string>SetTimeserver</string>
+    <key>installcheck_script</key>
+    <string>#!/bin/bash
+timeserver='time.company.com'
+systemsetup -getnetworktimeserver | awk '{print $4}' | grep -vq "${timeserver}"</string>
 	<key>postinstall_script</key>
 	<string>#!/bin/bash
 timeserver='time.company.com'
 systemsetup -setnetworktimeserver "${timeserver}"
 	</string>
-    <key>installcheck_script</key>
-    <string>#!/bin/bash
-timeserver='time.company.com'
-systemsetup -getnetworktimeserver | awk '{print $4}' | grep -vq "${timeserver}"</string>
 	<key>unattended_install</key>
 	<true/>
 	<key>version</key>
