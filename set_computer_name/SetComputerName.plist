@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>development</string>
+        <string>production</string>
+	</array>
+	<key>description</key>
+	<string>Sets the Computer Name to the Machine's Serial Number</string>
+	<key>display_name</key>
+	<string>Set the Computer Name</string>
+	<key>minimum_os_version</key>
+	<string>10.5.0</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>name</key>
+	<string>SetComputerName</string>
+    <key>installcheck_script</key>
+    <string>#!/bin/bash
+# Exit 0 if setting is missing
+# Exit 1 (anything non-0) if setting is present
+serial_number=$(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
+scutil --get ComputerName | grep -vq $serial_number</string>
+	<key>postinstall_script</key>
+	<string>#!/bin/bash
+# Set ComputerName to Serial #
+scutil --set ComputerName $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
+	</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>version</key>
+	<string>1.0.0</string>
+	<key>uninstallable</key>
+	<false/>
+</dict>
+</plist>
