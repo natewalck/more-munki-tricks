@@ -23,12 +23,12 @@
     <string>#!/bin/bash
 # Exit 0 if setting is missing
 # Exit 1 (anything non-0) if setting is present
-serial_number=$(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
-scutil --get ComputerName | grep -vq $serial_number</string>
+serial_number=$(/usr/sbin/system_profiler SPHardwareDataType | /usr/bin/awk '/Serial/ {print $4}')
+/usr/sbin/scutil --get ComputerName | /usr/bin/grep -vq $serial_number</string>
 	<key>postinstall_script</key>
 	<string>#!/bin/bash
 # Set ComputerName to Serial #
-scutil --set ComputerName $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
+/usr/sbin/scutil --set ComputerName $(system_profiler SPHardwareDataType | /usr/bin/awk '/Serial/ {print $4}')
 	</string>
 	<key>unattended_install</key>
 	<true/>
